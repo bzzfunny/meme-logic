@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEME//LOGIC — мемы под микроскопом</title>
+<style>
+:root {
+  --site-primary: #c9ff3d;
+  --site-secondary: #24252b;
+  --site-background: #111216;
+  --site-on-primary: #14160d;
+  --site-on-secondary: #f4f4ee;
+  --site-on-background: #f4f4ee;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+button { font: inherit; cursor: pointer; }
+#app { min-height: 100vh; width: 100%; border-radius: 0; overflow: hidden; background: light-dark(var(--site-background), var(--site-background)); color: var(--site-on-background); color-scheme: light dark; }
+:root { color-scheme: dark light; }
+a { color: inherit; text-decoration: none; }
+.wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+.nav { display:flex; align-items:center; justify-content:space-between; padding: calc(22px * var(--site-spacing-scale)) 0; border-bottom:1px solid #ffffff18; }
+.brand { display:flex; gap:10px; align-items:center; font-weight:950; letter-spacing:-1px; font-size:19px; }
+.brand-mark { display:grid; place-items:center; width:32px;height:32px;background:var(--site-primary);color:var(--site-on-primary);border-radius:9px;font-weight:1000; }
+.nav-tag { color:#b7b7bd; font-size:12px; text-transform:uppercase; letter-spacing:1.4px; }
+.hero { display:grid; grid-template-columns:1.1fr .9fr; gap:50px; align-items:center; padding:76px 0 66px; }
+.eyebrow { color:var(--site-primary); font-weight:800; font-size:12px; letter-spacing:2px; text-transform:uppercase; }
+h1,h2,h3,p { margin-top:0; }
+h1 { font-size:calc(clamp(42px, 6vw, 76px) * var(--site-heading-scale)); line-height:.98; letter-spacing:-.07em; margin:18px 0 22px; max-width:720px; }
+h1 span { color:var(--site-primary); }
+.lead { color:#b9bac3; line-height:1.7; font-size:17px; max-width:550px; }
+.actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+.btn { border:1px solid transparent; border-radius:calc(12px * var(--site-radius-scale)); padding:14px 18px; font-weight:850; transition:transform .15s, background .15s; }
+.btn:hover { transform:translateY(-2px); }
+.btn-primary { background:var(--site-primary); color:var(--site-on-primary); }
+.btn-secondary { background:#ffffff0b; color:var(--site-on-background); border-color:#ffffff20; }
+.hero-art { background:linear-gradient(145deg,#292b33,#17181d); border:1px solid #ffffff18; border-radius:24px; padding:20px; position:relative; transform:rotate(1deg); }
+.hero-art:before { content:""; position:absolute; width:140px;height:140px; border-radius:50%; background:var(--site-primary); filter:blur(80px); opacity:.16; right:5%;top:0; pointer-events:none; }
+.fake-top { display:flex; justify-content:space-between; color:#999ba5; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding-bottom:15px; border-bottom:1px solid #ffffff17; }
+.meme-card { margin-top:18px; border-radius:16px; overflow:hidden; background:#d9d9d2; color:#17181b; }
+.meme-visual { min-height:220px; display:grid; place-items:center; padding:24px; text-align:center; background:radial-gradient(circle at 70% 30%,#eaff9d,transparent 30%),linear-gradient(135deg,#b9e7d1,#b8c5d9); }
+.meme-visual .emoji { font-size:90px; filter:drop-shadow(0 8px 0 #1112); }
+.meme-caption { padding:18px; text-align:center; font-size:19px; font-weight:950; line-height:1.2; text-transform:uppercase; }
+.art-meta { display:flex; justify-content:space-between; padding:14px 2px 0; color:#a5a6ae; font-size:11px; }
+.section { padding:58px 0; }
+.section-head { display:flex; justify-content:space-between; gap:25px; align-items:end; margin-bottom:25px; }
+h2 { font-size:calc(clamp(29px,4vw,44px) * var(--site-heading-scale)); letter-spacing:-.055em; margin-bottom:10px; }
+.section-desc { color:#aeb0ba; line-height:1.6; max-width:580px; margin-bottom:0; }
+.pill { font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:8px 10px; border:1px solid #ffffff20; color:#bfc0c7; border-radius:999px; white-space:nowrap; }
+.quiz-layout { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr); gap:20px; }
+.panel { background:#1b1c22; border:1px solid #ffffff15; border-radius:calc(20px * var(--site-radius-scale)); padding:clamp(20px,3vw,30px); }
+.quiz-top { display:flex; justify-content:space-between; color:#a8a9b3; font-size:12px; margin-bottom:22px; }
+.progress { height:5px; background:#ffffff14; border-radius:20px; overflow:hidden; margin-bottom:22px; }
+.progress-bar { height:100%; background:var(--site-primary); width:0%; transition:width .25s; }
+.question-emoji { font-size:50px; margin-bottom:14px; }
+.question-title { font-size:24px; line-height:1.2; letter-spacing:-.04em; margin-bottom:10px; }
+.question-copy { color:#b5b6bf; line-height:1.6; font-size:14px; }
+.answers { display:grid; gap:10px; margin-top:22px; }
+.answer { text-align:left; background:#ffffff06; color:#f2f2ee; border:1px solid #ffffff1b; border-radius:12px; padding:14px 15px; display:flex; gap:12px; align-items:center; }
+.answer:hover:not(:disabled) { border-color:var(--site-primary); background:#c9ff3d0b; }
+.answer .letter { display:grid; place-items:center; flex:0 0 28px; height:28px; border-radius:8px; background:#ffffff12; color:#c9cad0; font-weight:800; font-size:12px; }
+.answer.correct { border-color:#b8f66a; background:#b8f66a12; }
+.answer.wrong { border-color:#ff8d79; background:#ff8d7912; }
+.feedback { display:none; margin-top:18px; padding:17px; border-radius:12px; background:#c9ff3d0b; border:1px solid #c9ff3d38; line-height:1.6; font-size:14px; color:#e5e7dd; }
+.feedback.show { display:block; }
+.feedback strong { color:var(--site-primary); display:block; margin-bottom:5px; }
+.next-row { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; }
+.mini { color:#9ea0aa; font-size:12px; }
+.result-panel { display:none; }
+.result-panel.show { display:block; }
+.result-score { font-size:64px; font-weight:950; letter-spacing:-.07em; color:var(--site-primary); }
+.score-line { height:7px; border-radius:10px; background:#ffffff13; overflow:hidden; margin:14px 0 20px; }
+.score-line div { height:100%; background:var(--site-primary); width:0%; }
+.result-label { font-size:23px; font-weight:900; margin:0 0 12px; }
+.result-copy { color:#b7b8c0; line-height:1.7; }
+.checklist { list-style:none; padding:0; margin:20px 0 0; display:grid; gap:12px; }
+.checklist li { display:flex; gap:10px; color:#dedfe3; line-height:1.5; font-size:14px; }
+.checklist li:before { content:"↗"; color:var(--site-primary); font-weight:900; }
+.side-title { font-size:12px; color:#a6a7b0; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:17px; }
+.insight { padding:17px 0; border-top:1px solid #ffffff16; }
+.insight:first-of-type { border-top:0; padding-top:0; }
+.insight-num { color:var(--site-primary); font-size:12px; font-weight:900; margin-bottom:8px; }
+.insight h3 { font-size:17px; margin-bottom:7px; }
+.insight p { color:#aeb0ba; font-size:13px; line-height:1.6; margin:0; }
+.lab { display:grid; grid-template-columns:.9fr 1.1fr; gap:20px; }
+.lab-controls { display:grid; gap:12px; }
+.label { color:#b9bbc3; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:7px; display:block; }
+select, textarea { width:100%; border:1px solid #ffffff22; border-radius:12px; padding:13px 14px; color:#f5f5ef; background:#131419; font:inherit; }
+textarea { min-height:100px; resize:vertical; line-height:1.5; }
+.mode-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.mode-tab { padding:11px 7px; background:#ffffff07; border:1px solid #ffffff1b; border-radius:10px; color:#c4c5cb; font-size:12px; font-weight:800; }
+.mode-tab.active { background:var(--site-primary); color:var(--site-on-primary); border-color:var(--site-primary); }
+.lab-output { min-height:100%; display:flex; flex-direction:column; }
+.output-top { display:flex; justify-content:space-between; gap:12px; color:#9fa0aa; font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-bottom:20px; }
+.output-quote { font-size:clamp(25px,3.3vw,38px); line-height:1.12; letter-spacing:-.045em; font-weight:900; margin:auto 0 20px; }
+.output-quote em { color:var(--site-primary); font-style:normal; }
+.output-explain { color:#b4b5bd; line-height:1.7; font-size:14px; border-top:1px solid #ffffff16; padding-top:18px; margin-bottom:0; }
+.emotion-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.emotion { background:#1b1c22; border:1px solid #ffffff16; border-radius:16px; padding:20px; }
+.emotion .icon { font-size:25px; margin-bottom:15px; }
+.emotion h3 { font-size:16px; margin-bottom:8px; }
+.emotion p { color:#aeb0ba; font-size:13px; line-height:1.6; margin:0; }
+.method { background:var(--site-primary); color:var(--site-on-primary); border-radius:22px; padding:clamp(25px,4vw,42px); display:grid; grid-template-columns:.8fr 1.2fr; gap:35px; align-items:start; }
+.method h2 { margin:12px 0; }
+.method .eyebrow { color:#394c0b; }
+.method-intro { line-height:1.7; max-width:360px; }
+.method-list { display:grid; gap:0; }
+.method-item { display:grid; grid-template-columns:35px 1fr; gap:12px; padding:15px 0; border-top:1px solid #17200025; }
+.method-item:first-child { border-top:0; }
+.method-item b { font-size:13px; }
+.method-item p { margin:4px 0 0; line-height:1.55; font-size:13px; opacity:.8; }
+.footer { padding:30px 0 40px; border-top:1px solid #ffffff18; color:#888a94; font-size:12px; display:flex; justify-content:space-between; gap:18px; }
+.footer strong { color:#d8d9de; }
+.toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); padding:12px 16px; border-radius:10px; background:var(--site-primary); color:var(--site-on-primary); font-size:13px; font-weight:800; display:none; z-index:10; }
+.toast.show { display:block; }
+@media (max-width:800px) {
+ .hero,.quiz-layout,.lab,.method { grid-template-columns:1fr; }
+ .hero { padding-top:48px; gap:32px; }
+ .hero-art { max-width:560px; width:100%; margin:0 auto; }
+ .section-head { align-items:start; flex-direction:column; }
+ .emotion-grid { grid-template-columns:1fr; }
+ .nav-tag { display:none; }
+}
+@media (max-width:480px) {
+ .wrap { width:min(100% - 28px,1120px); }
+ .hero { padding:40px 0 45px; }
+ .meme-visual { min-height:170px; }
+ .meme-visual .emoji { font-size:70px; }
+ .mode-tabs { grid-template-columns:1fr; }
+ .footer { flex-direction:column; }
+}
+
+/* Секретный режим: активируется тремя нажатиями на логотип */
+.brand { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+body.red-glitch #app {
+  filter: sepia(1) saturate(7) hue-rotate(315deg) contrast(1.12);
+}
+body.red-glitch #app::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 7px,
+    rgba(255, 0, 35, .18) 8px 10px
+  );
+  mix-blend-mode: screen;
+  animation: glitch-scan .12s steps(2, end) infinite;
+}
+body.red-glitch .brand,
+body.red-glitch .hero-art,
+body.red-glitch .panel,
+body.red-glitch .meme-card {
+  animation: glitch-jump .18s steps(2, end) infinite;
+}
+body.red-glitch .brand::after {
+  content: "SYSTEM ERROR";
+  position: absolute;
+  margin: 36px 0 0 -130px;
+  color: #ff263f;
+  background: #111;
+  font: 900 10px/1 monospace;
+  letter-spacing: 2px;
+  padding: 4px 6px;
+  transform: skew(-12deg);
+}
+@keyframes glitch-scan {
+  0% { transform: translateY(-3px); opacity: .45; }
+  50% { transform: translateY(3px); opacity: .9; }
+  100% { transform: translateY(0); opacity: .55; }
+}
+@keyframes glitch-jump {
+  0% { transform: translate(0, 0) skew(0); text-shadow: 2px 0 #ff003c, -2px 0 #00eaff; }
+  25% { transform: translate(2px, -1px) skew(-.5deg); }
+  50% { transform: translate(-2px, 1px) skew(.6deg); text-shadow: -3px 0 #ff003c, 3px 0 #00eaff; }
+  75% { transform: translate(1px, 2px) skew(0); }
+  100% { transform: translate(0, 0) skew(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.red-glitch #app::after,
+  body.red-glitch .brand,
+  body.red-glitch .hero-art,
+  body.red-glitch .panel,
+  body.red-glitch .meme-card { animation-duration: .5s; }
+}
+
+
+.secret-code-box { margin-top:4px; padding:14px; border:1px dashed #c9ff3d55; border-radius:12px; background:#c9ff3d08; }
+.secret-code-box input { width:100%; margin-top:8px; padding:12px 13px; border-radius:9px; border:1px solid #ffffff24; background:#101116; color:#f5f5f7; font:inherit; outline:none; }
+.secret-code-box input:focus { border-color:var(--site-primary); box-shadow:0 0 0 3px #c9ff3d18; }
+.secret-code-box small { display:block; margin-top:8px; color:#8e909a; font-size:11px; }
+#warlock-67-overlay { position:fixed; inset:0; z-index:99999; pointer-events:none; overflow:hidden; }
+#warlock-67-overlay .magic-number { position:absolute; top:50%; font-size:clamp(150px,30vw,390px); font-weight:1000; line-height:1; opacity:0; }
+#warlock-67-overlay .magic-six { left:calc(50% - 180px); color:#ff2638; text-shadow:0 0 24px #ff2638aa; animation:sixPop 1.1s cubic-bezier(.2,1.7,.4,1) forwards; }
+#warlock-67-overlay .magic-seven { left:calc(50% + 15px); color:#278cff; text-shadow:0 0 28px #278cffbb; animation:sevenFly 1.35s cubic-bezier(.15,.75,.2,1) forwards; }
+@keyframes sixPop { 0% { opacity:0; transform:translate(-40px,-50%) scale(.1) rotate(-25deg); } 55% { opacity:1; transform:translate(-40px,-50%) scale(1.25) rotate(8deg); } 75% { opacity:1; transform:translate(-40px,-50%) scale(.92) rotate(-3deg); } 100% { opacity:1; transform:translate(-40px,-50%) scale(1) rotate(0); } }
+@keyframes sevenFly { 0% { opacity:0; transform:translate(80px,80px) scale(.2) rotate(30deg); } 25% { opacity:1; } 100% { opacity:1; transform:translate(80px,-180px) scale(1.1) rotate(-18deg); } }
+
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="wrap nav">
+    <a class="brand" href="javascript:void(0)" aria-label="MEME Logic, главная"><span class="brand-mark">M/</span><span>MEME<span style="color:var(--site-primary)">//</span>LOGIC</span></a>
+    <div class="nav-tag">Интернет смеётся. Думай критически.</div>
+    <a class="btn btn-secondary" href="#detective" style="padding:10px 13px;font-size:12px">Начать тест ↗</a>
+  </header>
+
+  <main id="top">
+    <section class="wrap hero">
+      <div>
+        <div class="eyebrow">Цифровая медиаграмотность / 001</div>
+        <h1>Ты смеёшься над мемом —<br>или <span>мем над тобой?</span></h1>
+        <p class="lead">Мемы — это не только шутки. Они передают идеи, запускают эмоции и иногда прячут манипуляции на виду. Разберись, что именно ты считываешь.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#detective">Начать расследование <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-secondary" href="#lab">Поиграть со смыслом</a>
+        </div>
+        <p style="font-size:12px;color:#858791;margin-top:18px">7 карточек · без регистрации · около 3 минут</p>
+      </div>
+      <div class="hero-art" aria-label="Пример мем-карточки">
+        <div class="fake-top"><span>MEME FILE / 0001</span><span>● LIVE ANALYSIS</span></div>
+        <div class="meme-card">
+          <div class="meme-visual"><div class="emoji">🫠</div></div>
+          <div class="meme-caption">Когда увидел один пост<br>и уже всё понял про мир</div>
+        </div>
+        <div class="art-meta"><span>СИГНАЛ: ЭМОЦИОНАЛЬНЫЙ ВЫВОД</span><span>NO CONTEXT?</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="detective" style="background:#17181d;border-top:1px solid #ffffff0d;border-bottom:1px solid #ffffff0d">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="eyebrow">01 / Детектив по мемам</div><h2>Поймай приём, а не автора</h2><p class="section-desc">Выбирай наиболее обоснованный разбор. После каждого ответа объясним, на что обратить внимание — и где контекста пока не хватает.</p></div>
+          <span class="pill">Учебные примеры</span>
+        </div>
+        <div class="quiz-layout">
+          <div class="panel" id="quiz-panel">
+            <div class="quiz-top"><span id="question-count">КАРТОЧКА 01 / 07</span><span id="score-live">СЧЁТ: 0</span></div>
+            <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+            <div id="question-view">
+              <div class="question-emoji" id="q-emoji">🧑‍🎓</div>
+              <h3 class="question-title" id="q-title"></h3>
+              <p class="question-copy" id="q-copy"></p>
+              <div class="answers" id="answers"></div>
+              <div class="feedback" id="feedback" aria-live="polite"><strong id="feedback-title"></strong><span id="feedback-copy"></span></div>
+              <div class="next-row"><span class="mini" id="hint">Подсказка: не угадывай намерения автора.</span><button class="btn btn-primary" id="next-btn" style="display:none">Следующая ↗</button></div>
+            </div>
+            <div class="result-panel" id="result-panel">
+              <div class="eyebrow">РАССЛЕДОВАНИЕ ЗАВЕРШЕНО</div>
+              <div class="result-score"><span id="final-score">0</span><span style="font-size:24px;color:#aaa">/7</span></div>
+              <div class="score-line"><div id="final-bar"></div></div>
+              <h3 class="result-label" id="result-label">Мемный наблюдатель</h3>
+              <p class="result-copy" id="result-copy"></p>
+              <ul class="checklist">
+                <li>Найди первоисточник, прежде чем делать вывод.</li>
+                <li>Разделяй наблюдаемый факт и интерпретацию.</li>
+                <li>Если данных мало, ответ «не знаю» — нормальный ответ.</li>
+              </ul>
+              <div class="actions"><button class="btn btn-primary" id="restart-btn">Пройти ещё раз ↻</button><a class="btn btn-secondary" href="#lab">Изменить смысл →</a></div>
+            </div>
+          </div>
+          <aside class="panel">
+            <div class="side-title">Памятка аналитика</div>
+            <div class="insight"><div class="insight-num">01 — ФОРМА</div><h3>Что буквально показано?</h3><p>Отдели картинку и подпись от того, что ты предполагаешь о ситуации.</p></div>
+            <div class="insight"><div class="insight-num">02 — ЭФФЕКТ</div><h3>Какую реакцию вызывает?</h3><p>Смех, страх, злость или чувство превосходства могут влиять на то, как мы читаем сообщение.</p></div>
+            <div class="insight"><div class="insight-num">03 — ДОКАЗАТЕЛЬСТВА</div><h3>Чего не хватает?</h3><p>Один мем редко доказывает факт, намерение автора или свойства целой группы.</p></div>
+            <div style="margin-top:16px;padding:14px;border-radius:12px;background:#c9ff3d0c;color:#c9ff3d;font-size:12px;line-height:1.6">ПРАВИЛО: анализируем сообщение, а не ставим диагноз его автору.</div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="lab">
+      <div class="section-head">
+        <div><div class="eyebrow">02 / Лаборатория смыслов</div><h2>Одна ситуация. Три подачи.</h2><p class="section-desc">Переключай тональность и наблюдай, как меняется интерпретация. Слова могут подталкивать к выводу ещё до появления доказательств.</p></div>
+        <span class="pill">Попробуй сам</span>
+      </div>
+      <div class="lab">
+        <div class="panel lab-controls">
+          <div><label class="label" for="scenario">Выбери ситуацию</label><select id="scenario"><option value="uni">В университете отменили пары</option><option value="queue">Большая очередь в учреждении</option><option value="phone">Человек постоянно смотрит в телефон</option></select></div>
+          <div><span class="label">Способ подачи</span><div class="mode-tabs" role="group" aria-label="Способ подачи"><button class="mode-tab active" data-mode="joke">Юмор</button><button class="mode-tab" data-mode="neutral">Нейтрально</button><button class="mode-tab" data-mode="manip">Давление</button></div></div>
+          <div><label class="label" for="own-caption">Или придумай свою подпись</label><textarea id="own-caption" placeholder="Напиши подпись и сравни её с примерами…"></textarea><button class="btn btn-secondary" id="apply-caption" style="margin-top:10px;width:100%">Разобрать мою подпись ↗</button></div>
+        </div>
+        <div class="panel lab-output">
+          <div class="output-top"><span id="output-tag">MODE / HUMOUR</span><span>CONTEXT CHECK</span></div>
+          <div class="output-quote" id="output-quote">«Пары отменили. <em>Мой будильник зря старался.</em>»</div>
+          <p class="output-explain" id="output-explain" contenteditable="true" aria-label="Объяснение: можно вводить текст">Здесь шутка строится на узнаваемой ситуации и неожиданном облегчении. Она не делает серьёзных утверждений о причинах отмены пар.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="background:#17181d;border-top:1px solid #ffffff0d">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">03 / Быстрый скан</div><h2>Перед тем как нажать «репост»</h2><p class="section-desc">Пять вопросов, которые помогают не перепутать сильную эмоцию с доказательством.</p></div></div>
+        <div class="emotion-grid">
+          <article class="emotion"><div class="icon">🔎</div><h3>Есть первоисточник?</h3><p>Поищи оригинальную публикацию, дату и полный фрагмент, а не только скриншот.</p></article>
+          <article class="emotion"><div class="icon">🧠</div><h3>Факт или вывод?</h3><p>«Очередь была длинной» — наблюдение. «Они всегда некомпетентны» — обобщение.</p></article>
+          <article class="emotion"><div class="icon">⚡</div><h3>Меня торопят злиться?</h3><p>Сильная эмоция не делает сообщение ложным, но поводом проверить его она быть может.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="method">
+        <div><div class="eyebrow">Манифест MEME//LOGIC</div><h2>Не верь всему.<br>Но и не подозревай всё.</h2><p class="method-intro">Критическое мышление — это не охота за заговорами. Это привычка проверять, задавать вопросы и признавать, когда данных недостаточно.</p></div>
+        <div class="method-list">
+          <div class="method-item"><b>01</b><div><b>Мем не равен пропаганде</b><p>Это может быть шутка, сатира, реклама, критика или попытка повлиять на мнение. Формат сам по себе ничего не доказывает.</p></div></div>
+          <div class="method-item"><b>02</b><div><b>Приём не доказывает намерение</b><p>Стереотип или эмоциональная подпись могут влиять на восприятие, но по одному примеру нельзя достоверно знать замысел автора.</p></div></div>
+          <div class="method-item"><b>03</b><div><b>Контекст меняет прочтение</b><p>Проверяй источник, обстоятельства, факты и то, что осталось за рамками кадра.</p></div></div>
+          <div class="method-item"><b>04</b><div><b>Сомнение — тоже навык</b><p>Если информации мало, честнее сказать «недостаточно данных», чем уверенно угадать.</p></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap footer"><div><strong>MEME//LOGIC</strong> — учебный интерактив о мемах и медиаграмотности.</div><div>Все примеры вымышлены · никаких диагнозов и «детекторов лжи».</div></footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<div id="warlock-67-overlay" hidden><span class="magic-number magic-six">6</span><span class="magic-number magic-seven">7</span></div>
+<script>
+const questions = [
+ {emoji:"🎓",title:"«Один студент проспал экзамен. Все студенты ленивые»",copy:"Что можно обоснованно сказать о такой подписи?",answers:["Она доказывает, что студенты ленивые","Это обобщение по единичному случаю","Автор точно ведёт пропаганду","Нельзя определить, смешно ли это"],correct:1,why:"Единичный случай не доказывает свойство целой группы. Это похоже на поспешное обобщение. При этом подпись может быть просто шуткой — намерение автора по ней не установить."},
+ {emoji:"😱",title:"«СРОЧНО! Это изменит всё! Поделись, пока не удалили!»",copy:"Какой сигнал стоит заметить первым?",answers:["Любая срочная публикация — фейк","Эмоциональная срочность и давление на репост","Здесь точно есть проверенные факты","Это просто нейтральный заголовок"],correct:1,why:"Срочность и призыв немедленно делиться могут мешать проверке. Это повод открыть источник и поискать подтверждения, но не автоматическое доказательство ложности."},
+ {emoji:"📸",title:"Мем показывает очередь и подписан: «Они никогда не умеют работать»",copy:"Какой элемент здесь требует особого внимания?",answers:["Сам факт существования очереди","Обобщение и приписывание свойства целой группе","Размер шрифта","Наличие фотографии"],correct:1,why:"Из одного кадра нельзя вывести, что люди или организация «никогда не умеют работать». Нужны контекст, данные и понимание причин очереди."},
+ {emoji:"🧩",title:"Из длинного видео вырезали фразу: «Мы больше не будем это терпеть!»",copy:"Какой следующий шаг наиболее полезен?",answers:["Сразу решить, что говорящий опасен","Оценить только комментарии под постом","Найти полную запись и контекст цитаты","Поставить лайк, если фраза звучит убедительно"],correct:2,why:"Обрезанная цитата может менять смысл. Найди полный фрагмент и проверь, о чём говорили до и после этой фразы."},
+ {emoji:"🫠",title:"Ты увидел мем, который идеально подтверждает твоё мнение",copy:"Что лучше сделать перед тем, как отправить его друзьям?",answers:["Поделиться: совпадение с мнением уже доказательство","Проверить источник и фактические утверждения","Считать мем достоверным, если он смешной","Игнорировать любые мнения, кроме своего"],correct:1,why:"Когда сообщение подтверждает наши ожидания, легко не заметить слабые доказательства. Проверь утверждения независимо от того, нравится ли тебе вывод."},
+ {emoji:"🎭",title:"Одна и та же картинка смешит одного человека и обижает другого",copy:"Какой вывод наиболее аккуратный?",answers:["Один из них обязательно неправ","Контекст и опыт аудитории влияют на прочтение","Юмор не может содержать манипуляций","Если кто-то обиделся, это точно пропаганда"],correct:1,why:"Мемы читаются в контексте: важны аудитория, культурные коды и ситуация. Разные реакции не доказывают автоматически ни злой умысел, ни безобидность."},
+ {emoji:"📊",title:"«97% людей согласны с этим мемом» — источник не указан",copy:"Как лучше оценить это утверждение?",answers:["Число выглядит точным, значит верим","Это точно ложь, потому что источник не указан","Нужно проверить источник, метод и выборку","Мемы не могут использовать статистику"],correct:2,why:"Точное число создаёт впечатление надёжности, но без источника и метода его нельзя проверить. Правильный вывод сейчас — данных недостаточно."}
+];
+let current=0, score=0, answered=false;
+const $ = id => document.getElementById(id);
+function renderQuestion(){
+ const q=questions[current]; answered=false;
+ $("question-count").textContent=`КАРТОЧКА ${String(current+1).padStart(2,"0")} / ${questions.length}`;
+ $("score-live").textContent=`СЧЁТ: ${score}`;
+ $("progress-bar").style.width=`${current/questions.length*100}%`;
+ $("q-emoji").textContent=q.emoji; $("q-title").textContent=q.title; $("q-copy").textContent=q.copy;
+ $("feedback").classList.remove("show"); $("next-btn").style.display="none"; $("hint").textContent="Подсказка: не угадывай намерения автора.";
+ const box=$("answers"); box.innerHTML="";
+ q.answers.forEach((answer,i)=>{
+  const b=document.createElement("button"); b.className="answer";
+  b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${answer}</span>`;
+  b.addEventListener("click",()=>chooseAnswer(i,b)); box.appendChild(b);
+ });
+ $("result-panel").classList.remove("show"); $("question-view").style.display="block";
+}
+function chooseAnswer(i,button){
+ if(answered)return; answered=true;
+ const q=questions[current]; const buttons=[...$("answers").querySelectorAll("button")];
+ buttons.forEach((b,index)=>{b.disabled=true;if(index===q.correct)b.classList.add("correct");});
+ if(i===q.correct){score++;button.classList.add("correct");$("feedback-title").textContent="Хорошее наблюдение ✓";}
+ else {$("feedback-title").textContent="Есть нюанс — разберём";}
+ $("feedback-copy").textContent=q.why; $("feedback").classList.add("show");
+ $("score-live").textContent=`СЧЁТ: ${score}`; $("next-btn").style.display="inline-block";
+ $("next-btn").textContent=current===questions.length-1?"Узнать результат ↗":"Следующая ↗";
+ $("hint").textContent=i===q.correct?"Ты выбрал наиболее обоснованный вариант.":"Ошибаться нормально: главное — понять ход рассуждения.";
+ $("progress-bar").style.width=`${(current+1)/questions.length*100}%`;
+}
+$("next-btn").addEventListener("click",()=>{
+ if(current<questions.length-1){current++;renderQuestion();} else showResult();
+});
+function showResult(){
+ $("question-view").style.display="none"; $("result-panel").classList.add("show");
+ $("final-score").textContent=score; $("final-bar").style.width=`${score/questions.length*100}%`;
+ let label,copy;
+ if(score>=6){label="Контекстный детектив";copy="Ты хорошо замечаешь слабые аргументы в этих примерах. Не забывай: даже правильный ответ в тесте не заменяет проверку первоисточников в реальной жизни.";}
+ else if(score>=3){label="Мемный наблюдатель";copy="Ты уже замечаешь часть приёмов. Попробуй чаще разделять то, что буквально показано, и вывод, к которому тебя подталкивают.";}
+ else {label="Стажёр отдела контекста";copy="Хорошая отправная точка: теперь у тебя есть несколько вопросов, которые можно задавать перед репостом. Пройди тест ещё раз и обрати внимание на объяснения.";}
+ $("result-label").textContent=label; $("result-copy").textContent=copy;
+}
+$("restart-btn").addEventListener("click",()=>{current=0;score=0;renderQuestion();$("progress-bar").style.width="0%";});
+renderQuestion();
+
+const examples={
+ uni:{
+  joke:{tag:"MODE / HUMOUR",quote:"«Пары отменили. <em>Мой будильник зря старался.</em>»",explain:"Узнаваемая ситуация и лёгкое преувеличение. Подпись не утверждает, что кто-то специально навредил студентам."},
+  neutral:{tag:"MODE / NEUTRAL",quote:"«Сегодня занятия <em>отменены.</em>»",explain:"Нейтральное сообщение передаёт событие без оценки причин или виноватых. Для полной информации стоит проверить официальное объявление."},
+  manip:{tag:"MODE / PRESSURE",quote:"«Они снова <em>издеваются над студентами!</em>»",explain:"Формулировка приписывает злой умысел и вызывает возмущение. Это может быть манипулятивной подачей, если намерение не подтверждено фактами."}
+ },
+ queue:{
+  joke:{tag:"MODE / HUMOUR",quote:"«Пришёл на пять минут. <em>Состарился на три года.</em>»",explain:"Гипербола передаёт ощущение долгого ожидания. Это не статистическое утверждение о работе учреждения."},
+  neutral:{tag:"MODE / NEUTRAL",quote:"«В учреждении образовалась <em>длинная очередь.</em>»",explain:"Описывается наблюдаемая ситуация. Причины очереди из этой фразы не известны."},
+  manip:{tag:"MODE / PRESSURE",quote:"«Им плевать на людей — <em>посмотрите на эту очередь!</em>»",explain:"Кадр используется как основание для вывода о чужом отношении. Чтобы проверить его, нужны дополнительные сведения о причинах ожидания и организации работы."}
+ },
+ phone:{
+  joke:{tag:"MODE / HUMOUR",quote:"«Зашёл проверить время. <em>Вышел через 40 мемов.</em>»",explain:"Шутка о привычном цифровом поведении. Она преувеличивает ситуацию, не объявляя всех пользователей одинаковыми."},
+  neutral:{tag:"MODE / NEUTRAL",quote:"«Человек <em>смотрит в телефон.</em>»",explain:"Это описание видимого действия. По нему нельзя достоверно заключить, что человек зависим, невежлив или игнорирует окружающих."},
+  manip:{tag:"MODE / PRESSURE",quote:"«Люди с телефонами уже <em>разучились думать.</em>»",explain:"Здесь действие превращается в оценку целой группы. Это обобщение, для которого подпись не приводит доказательств."}
+ }
+};
+let activeMode="joke";
+function updateLab(){
+ const scenario=$("scenario").value, e=examples[scenario][activeMode];
+ $("output-tag").textContent=e.tag; $("output-quote").innerHTML=e.quote; $("output-explain").textContent=e.explain;
+}
+document.querySelectorAll(".mode-tab").forEach(btn=>btn.addEventListener("click",()=>{
+ activeMode=btn.dataset.mode; document.querySelectorAll(".mode-tab").forEach(b=>b.classList.toggle("active",b===btn)); updateLab();
+}));
+$("scenario").addEventListener("change",updateLab);
+$("apply-caption").addEventListener("click",()=>{
+ const val=$("own-caption").value.trim();
+ if(!val){showToast("Сначала напиши подпись 🙂");return;}
+ $("output-tag").textContent="MODE / YOUR CAPTION";
+ $("output-quote").textContent="«"+val+"»";
+ $("output-explain").textContent="Проверь: есть ли здесь проверяемый факт или только оценка? Не обобщает ли подпись единичный случай? Приписывает ли она кому-то намерения без доказательств? Это вопросы для самостоятельного разбора, а не автоматический вердикт о пропаганде.";
+});
+function showToast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300);}
+
+// Секретный красный глитч: три нажатия на логотип за 1,5 секунды.
+const brandLogo = document.querySelector(".brand");
+let logoClicks = 0;
+let logoClickTimer = null;
+let glitchTimer = null;
+
+brandLogo.addEventListener("click", (event) => {
+  event.preventDefault();
+  logoClicks += 1;
+  clearTimeout(logoClickTimer);
+  logoClickTimer = setTimeout(() => { logoClicks = 0; }, 1500);
+
+  if (logoClicks >= 3) {
+    logoClicks = 0;
+    clearTimeout(glitchTimer);
+    document.body.classList.add("red-glitch");
+    glitchTimer = setTimeout(() => {
+      document.body.classList.remove("red-glitch");
+    }, 3000);
+  }
+});
+
+
+const labExplanation = document.getElementById("output-explain");
+const captionInput = document.getElementById("own-caption");
+let warlockOverlay = document.getElementById("warlock-67-overlay");
+let warlockTimer;
+let typedDigits = "";
+let digitTimer;
+function play67Animation() {
+  if (!warlockOverlay) return;
+  const oldOverlay = warlockOverlay;
+  const newOverlay = oldOverlay.cloneNode(true);
+  oldOverlay.replaceWith(newOverlay);
+  warlockOverlay = newOverlay;
+  warlockOverlay.hidden = false;
+  clearTimeout(warlockTimer);
+  warlockTimer = setTimeout(() => { warlockOverlay.hidden = true; }, 3000);
+}
+function track67Keypress(element) {
+  if (!element) return;
+  element.addEventListener("keydown", (event) => {
+    if (event.key.length === 1 && /[0-9]/.test(event.key)) {
+      typedDigits = (typedDigits + event.key).slice(-2);
+      clearTimeout(digitTimer);
+      digitTimer = setTimeout(() => { typedDigits = ""; }, 1500);
+      if (typedDigits === "67") {
+        typedDigits = "";
+        play67Animation();
+      }
+    }
+  });
+}
+track67Keypress(labExplanation);
+track67Keypress(captionInput);
+
+</script>
+</body>
+</html>
